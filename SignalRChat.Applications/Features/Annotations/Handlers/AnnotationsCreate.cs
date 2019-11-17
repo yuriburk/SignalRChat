@@ -2,20 +2,20 @@
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Domain.Features.Annotations;
 using SignalRChat.Infra.Results;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalRChat.Applications.Features.Messages.Handlers
+namespace SignalRChat.Applications.Features.Annotations.Handlers
 {
-    [AutoMap(typeof(Message))]
-    public class MessagesCreate
+    [AutoMap(typeof(Annotation))]
+    public class AnnotationsCreate
     {
-        public class Command : IRequest<Result<Message, Exception>>
+        public class Command : IRequest<Result<Annotation, Exception>>
         {
-            public int Name { get; set; }
+            public string Name { get; set; }
             public string Text { get; set; }
 
             public virtual ValidationResult Validate()
@@ -27,28 +27,28 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
             {
                 public Validator()
                 {
-                    RuleFor(c => c.Name).NotEmpty().WithMessage("É necessário estar logado para enviar uma mensagem.");
+                    RuleFor(c => c.Name).NotEmpty().MaximumLength(255);
                     RuleFor(c => c.Text).NotEmpty().MaximumLength(255);
                 }
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Message, Exception>>
+        public class Handler : IRequestHandler<Command, Result<Annotation, Exception>>
         {
             private readonly IMapper _mapper;
-            private readonly IMessageRepository _messageRepository;
+            private readonly IAnnotationRepository _messageRepository;
 
-            public Handler(IMapper mapper, IMessageRepository messageRepository)
+            public Handler(IMapper mapper, IAnnotationRepository messageRepository)
             {
                 _mapper = mapper;
                 _messageRepository = messageRepository;
             }
 
-            public async Task<Result<Message, Exception>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Annotation, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var message = _mapper.Map<Message>(request);
+                var annotation = _mapper.Map<Annotation>(request);
 
-                var callback = await _messageRepository.AddMessage(message);
+                var callback = await _messageRepository.AddAnnotation(annotation);
                 if (callback.IsFailure)
                     return callback.Failure;
                 return callback.Success;

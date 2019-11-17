@@ -17,8 +17,9 @@ namespace SignalRChat.API.Controllers
             return Ok(true);
         }
 
-        protected IActionResult HandleResult<TSuccess, TFailure>(Result<TSuccess, TFailure> result) where TFailure : Exception
+        protected async Task<IActionResult> HandleResult<TSuccess, TFailure>(Func<Task<Result<TSuccess, TFailure>>> function) where TFailure : Exception
         {
+            var result = await function();
             if (result.IsFailure)
                 return HandleFailure(result.Failure);
 

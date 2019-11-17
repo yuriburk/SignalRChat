@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SignalRChat.Domain.Features.Messages;
-using SignalRChat.Infra.Features.Messages;
+using SignalRChat.Domain.Features.Annotations;
+using SignalRChat.Infra.Features.Annotations;
 
 namespace SignalRChat.Infra.Contexts
 {
@@ -11,11 +11,11 @@ namespace SignalRChat.Infra.Contexts
 
         }
 
-        public DbSet<Message> Messages { get; set; }
+        public DbSet<Annotation> Annotations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new MessageEntityConfiguration());
+            modelBuilder.ApplyConfiguration(new AnnotationEntityConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

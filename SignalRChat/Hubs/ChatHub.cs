@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Domain.Features.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +9,9 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(Message message)
+        public async Task SendMessage(Annotation annotation)
         {
-            await Clients.All.SendAsync("sendMessage", message);
+            await Clients.All.SendAsync("sendMessage", annotation);
         }
     }
 }

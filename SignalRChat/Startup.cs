@@ -6,12 +6,13 @@ using Microsoft.Extensions.Hosting;
 using AutoMapper;
 using MediatR;
 using System;
-using SignalRChat.Domain.Features.Messages;
-using SignalRChat.Infra.Features.Messages;
+using SignalRChat.Domain.Features.Annotations;
+using SignalRChat.Infra.Features.Annotations;
 using SignalRChat.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
-using SignalRChat.Applications.Features.Messages;
+using SignalRChat.Applications.Features.Annotations;
 using Microsoft.AspNetCore.Http;
+using SignalRChat.API.Hubs;
 
 namespace SignalRChat
 {
@@ -29,13 +30,13 @@ namespace SignalRChat
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new MessageMappingProfile());
+                mc.AddProfile(new AnnotationMappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
             var assembly = AppDomain.CurrentDomain.Load("SignalRChat.Applications");
             services.AddMediatR(assembly);
-            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddScoped<IAnnotationRepository, AnnotationRepository>();
             services.AddDbContext<SignalRChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SignalRChat")));
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddSignalR();
@@ -57,6 +58,7 @@ namespace SignalRChat
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<ChatHub>("chatHub");
             });
 
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())

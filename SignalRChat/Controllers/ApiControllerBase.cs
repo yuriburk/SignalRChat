@@ -28,7 +28,7 @@ namespace SignalRChat.API.Controllers
 
         protected IActionResult HandleFailure(Exception error)
         {
-            return StatusCode(ErrorCodes.Unhandled.GetHashCode(), error.Message);
+            return StatusCode(ErrorCodes.Unhandled.GetHashCode(), error.Annotation);
         }
     }
 }

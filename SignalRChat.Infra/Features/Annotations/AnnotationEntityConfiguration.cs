@@ -11,7 +11,7 @@ namespace SignalRChat.Infra.Features.Annotations
     {
         public void Configure(EntityTypeBuilder<Annotation> builder)
         {
-            builder.ToTable("Message");
+            builder.ToTable("Annotation");
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Name).HasMaxLength(255).IsRequired();
             builder.Property(m => m.Text).HasMaxLength(255).IsRequired();

@@ -36,19 +36,19 @@ namespace SignalRChat.Applications.Features.Annotations.Handlers
         public class Handler : IRequestHandler<Command, Result<Annotation, Exception>>
         {
             private readonly IMapper _mapper;
-            private readonly IAnnotationRepository _messageRepository;
+            private readonly IAnnotationRepository _annotationRepository;
 
-            public Handler(IMapper mapper, IAnnotationRepository messageRepository)
+            public Handler(IMapper mapper, IAnnotationRepository annotationRepository)
             {
                 _mapper = mapper;
-                _messageRepository = messageRepository;
+                _annotationRepository = annotationRepository;
             }
 
             public async Task<Result<Annotation, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var annotation = _mapper.Map<Annotation>(request);
 
-                var callback = await _messageRepository.AddAnnotation(annotation);
+                var callback = await _annotationRepository.AddAnnotation(annotation);
                 if (callback.IsFailure)
                     return callback.Failure;
                 return callback.Success;

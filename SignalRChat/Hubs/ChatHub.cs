@@ -9,9 +9,9 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(Annotation annotation)
+        public async Task SendAnnotation(Annotation annotation)
         {
-            await Clients.All.SendAsync("sendMessage", annotation);
+            await Clients.All.SendAsync("sendAnnotation", annotation);
         }
     }
 }

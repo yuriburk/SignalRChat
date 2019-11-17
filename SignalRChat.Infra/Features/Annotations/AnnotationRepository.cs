@@ -18,10 +18,10 @@ namespace SignalRChat.Infra.Features.Annotations
 
         public async Task<Result<Annotation, Exception>> AddAnnotation(Annotation annotation)
         {
-            var newMessage = _context.Annotations.Add(annotation).Entity;
+            var newAnnotation = _context.Annotations.Add(annotation).Entity;
             await _context.SaveChangesAsync();
 
-            return newMessage;
+            return newAnnotation;
         }
 
         public Result<IQueryable<Annotation>, Exception> GetAll()

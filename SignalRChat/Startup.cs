@@ -10,6 +10,7 @@ using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.Features.Messages;
 using SignalRChat.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
+using SignalRChat.Applications.Features.Messages;
 
 namespace SignalRChat
 {
@@ -25,7 +26,12 @@ namespace SignalRChat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper(typeof(Startup), typeof(Applications.Module));
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new MessageMappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
             var assembly = AppDomain.CurrentDomain.Load("SignalRChat.Applications");
             services.AddMediatR(assembly);
             services.AddScoped<IMessageRepository, MessageRepository>();

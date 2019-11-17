@@ -14,7 +14,7 @@ namespace SignalRChat.Infra.Features.Messages
             builder.ToTable("Message");
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Text).HasMaxLength(255).IsRequired();
-            builder.HasOne(m => m.User).WithMany(u => u.Messages).IsRequired();
+            builder.HasOne(m => m.User).WithMany(u => u.Messages).HasForeignKey(m => m.UserId).IsRequired();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SignalRChat.Domain.Results;
+using SignalRChat.Domain.Base.Results;
 using SignalRChat.Infra.Results;
 using System;
 using System.Collections.Generic;
@@ -17,17 +17,18 @@ namespace SignalRChat.API.Controllers
             return Ok(true);
         }
 
-        protected IActionResult HandleResult<TSuccess, TFailure>(Result<TSuccess, TFailure> result) where TFailure : Error
+        protected async Task<IActionResult> HandleResult<TSuccess, TFailure>(Func<Task<Result<TSuccess, TFailure>>> func) where TFailure : Exception
         {
+            var result = await func();
             if (result.IsFailure)
                 return HandleFailure(result.Failure);
 
             return Ok(result.Success);
-        }   
+        }
 
-        protected IActionResult HandleFailure(Error error)
+        protected IActionResult HandleFailure(Exception error)
         {
-            return StatusCode(error.ErrorCode.GetHashCode(), error.Message);
+            return StatusCode(ErrorCodes.Unhandled.GetHashCode(), error.Message);
         }
     }
 }

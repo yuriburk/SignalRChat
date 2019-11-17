@@ -3,9 +3,6 @@ using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Domain.Features.Users;
 using SignalRChat.Infra.Features.Messages;
 using SignalRChat.Infra.Features.Users;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace SignalRChat.Infra.Contexts
 {
@@ -26,5 +23,7 @@ namespace SignalRChat.Infra.Contexts
 
             base.OnModelCreating(modelBuilder);
         }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) => optionsBuilder.UseLazyLoadingProxies(false);
     }
 }

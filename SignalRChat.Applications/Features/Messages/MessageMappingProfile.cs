@@ -7,9 +7,9 @@ using System.Text;
 
 namespace SignalRChat.Applications.Features.Messages
 {
-    public class MappingProfile : Profile
+    public class MessageMappingProfile : Profile
     {
-        public MappingProfile()
+        public MessageMappingProfile()
         {
             CreateMap<MessagesCreate.Command, Message>();
         }

@@ -1,11 +1,8 @@
 ﻿using SignalRChat.Domain.Features.Messages;
-using SignalRChat.Domain.Results;
 using SignalRChat.Infra.Contexts;
 using SignalRChat.Infra.Results;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SignalRChat.Infra.Features.Messages
@@ -19,7 +16,7 @@ namespace SignalRChat.Infra.Features.Messages
             _context = context;
         }
 
-        public async Task<Result<Message, Error>> AddMessage(Message message)
+        public async Task<Result<Message, Exception>> AddMessage(Message message)
         {
             var newMessage = _context.Messages.Add(message).Entity;
             await _context.SaveChangesAsync();
@@ -27,7 +24,7 @@ namespace SignalRChat.Infra.Features.Messages
             return newMessage;
         }
 
-        public Result<IQueryable<Message>, Error> GetAll()
+        public Result<IQueryable<Message>, Exception> GetAll()
         {
             return _context.Messages;
         }

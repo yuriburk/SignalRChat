@@ -13,9 +13,9 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
     [AutoMap(typeof(Message))]
     public class MessagesCreate
     {
-        public class Command : IRequest<Result<int, Exception>>
+        public class Command : IRequest<Result<Message, Exception>>
         {
-            public int UserId { get; set; }
+            public int Name { get; set; }
             public string Text { get; set; }
 
             public virtual ValidationResult Validate()
@@ -27,31 +27,31 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
             {
                 public Validator()
                 {
-                    RuleFor(c => c.UserId).NotEmpty().WithMessage("É necessário estar logado para enviar uma mensagem.");
+                    RuleFor(c => c.Name).NotEmpty().WithMessage("É necessário estar logado para enviar uma mensagem.");
                     RuleFor(c => c.Text).NotEmpty().MaximumLength(255);
                 }
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<int, Exception>>
+        public class Handler : IRequestHandler<Command, Result<Message, Exception>>
         {
             private readonly IMapper _mapper;
-            private readonly IMessageRepository _repository;
+            private readonly IMessageRepository _messageRepository;
 
-            public Handler(IMapper mapper, IMessageRepository repository)
+            public Handler(IMapper mapper, IMessageRepository messageRepository)
             {
                 _mapper = mapper;
-                _repository = repository;
+                _messageRepository = messageRepository;
             }
 
-            public async Task<Result<int, Exception>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Message, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var message = _mapper.Map<Message>(request);
 
-                var callback = await _repository.AddMessage(message);
+                var callback = await _messageRepository.AddMessage(message);
                 if (callback.IsFailure)
                     return callback.Failure;
-                return callback.Success.Id;
+                return callback.Success;
             }
         }
     }

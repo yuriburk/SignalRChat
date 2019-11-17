@@ -11,6 +11,7 @@ using SignalRChat.Infra.Features.Messages;
 using SignalRChat.Infra.Contexts;
 using Microsoft.EntityFrameworkCore;
 using SignalRChat.Applications.Features.Messages;
+using Microsoft.AspNetCore.Http;
 
 namespace SignalRChat
 {
@@ -36,6 +37,8 @@ namespace SignalRChat
             services.AddMediatR(assembly);
             services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddDbContext<SignalRChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SignalRChat")));
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            services.AddSignalR();
             services.AddControllers();
         }
 

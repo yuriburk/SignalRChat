@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SignalRChat.API.Controllers;
+using SignalRChat.API.Hubs;
 using SignalRChat.Applications.Features.Messages.Handlers;
 using SignalRChat.Applications.Features.MessagesSolicitations.Handlers;
 using System.Threading.Tasks;
@@ -11,23 +12,29 @@ namespace SignalRChat.Controllers
     [Route("api/[controller]")]
     public class MessagesController : ApiControllerBase
     {
+        private readonly ChatHub _hub;
         private readonly IMediator _mediator;
 
-        public MessagesController(IMediator mediator)
+        public MessagesController(ChatHub hub, IMediator mediator)
         {
+            _hub = hub;
             _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllAsync()
         {
-            return await HandleResult(() => _mediator.Send(new MessagesCollection.Query()));
+            var result = await _mediator.Send(new MessagesCollection.Query());
+            return HandleResult(result);
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] MessagesCreate.Command command)
+        public async Task CreateAsync([FromBody] MessagesCreate.Command command)
         {
-            return await HandleResult(() => _mediator.Send(command));
+            var result = await _mediator.Send(command);
+
+            if (result.IsSuccess)
+                await _hub.SendMessage(result.Success);
         }
     }
 }

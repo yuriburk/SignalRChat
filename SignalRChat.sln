@@ -15,13 +15,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "4. Infra", "4. Infra", "{38
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{EF52B8E1-2C92-4C5F-9525-EFEFDDF1FC86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Applications", "SignalRChat.Applications\SignalRChat.Applications.csproj", "{164515BC-FD44-4943-A260-F80E4132AD7B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Applications", "SignalRChat.Applications\SignalRChat.Applications.csproj", "{164515BC-FD44-4943-A260-F80E4132AD7B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Domain", "SignalRChat.Domain\SignalRChat.Domain.csproj", "{05A6BB25-37E6-4473-AB86-641F99A8B6FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Domain", "SignalRChat.Domain\SignalRChat.Domain.csproj", "{05A6BB25-37E6-4473-AB86-641F99A8B6FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SingalRChat.Tests", "SingalRChat.Tests\SingalRChat.Tests.csproj", "{9D09DAB1-79F3-44C7-B003-083B4AEA9D98}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SingalRChat.Tests", "SingalRChat.Tests\SingalRChat.Tests.csproj", "{9D09DAB1-79F3-44C7-B003-083B4AEA9D98}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRChat.Infra", "SignalRChat.Infra\SignalRChat.Infra.csproj", "{A1198CBA-A618-46AC-B9D4-909A873B01CB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Infra", "SignalRChat.Infra\SignalRChat.Infra.csproj", "{A1198CBA-A618-46AC-B9D4-909A873B01CB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

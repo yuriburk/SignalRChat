@@ -11,7 +11,7 @@ namespace SignalRChat.API.Controllers
     public class ApiControllerBase : ControllerBase
     {
         [HttpGet]
-        [Route("is-alive")]
+        [Route("api/is-alive")]
         public ActionResult IsAlive()
         {
             return Ok(true);

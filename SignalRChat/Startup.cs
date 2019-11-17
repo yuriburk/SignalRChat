@@ -1,14 +1,15 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using AutoMapper;
+using MediatR;
+using System;
+using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Infra.Features.Messages;
+using SignalRChat.Infra.Contexts;
+using Microsoft.EntityFrameworkCore;
 
 namespace SignalRChat
 {
@@ -24,6 +25,11 @@ namespace SignalRChat
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup), typeof(Applications.Module));
+            var assembly = AppDomain.CurrentDomain.Load("SignalRChat.Applications");
+            services.AddMediatR(assembly);
+            services.AddScoped<IMessageRepository, MessageRepository>();
+            services.AddDbContext<SignalRChatDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SignalRChat")));
             services.AddControllers();
         }
 
@@ -43,6 +49,12 @@ namespace SignalRChat
             {
                 endpoints.MapControllers();
             });
+
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
+            {
+                var context = serviceScope.ServiceProvider.GetRequiredService<SignalRChatDbContext>();
+                context.Database.EnsureCreated();
+            }
         }
     }
 }

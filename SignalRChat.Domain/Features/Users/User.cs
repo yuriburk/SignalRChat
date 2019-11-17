@@ -1,4 +1,4 @@
-﻿using SignalRChat.Domain.Base;
+﻿using SignalRChat.Domain.Base.Entities;
 using SignalRChat.Domain.Features.Messages;
 using System.Collections.Generic;
 

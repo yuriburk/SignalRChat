@@ -1,5 +1,8 @@
-﻿using System;
+﻿using SignalRChat.Domain.Results;
+using SignalRChat.Infra.Results;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -7,7 +10,7 @@ namespace SignalRChat.Domain.Features.Messages
 {
     public interface IMessageRepository
     {
-        Task<Tuple<bool, List<string>>> AddUser(Message message);
-        Task<Tuple<Message, List<string>>> GetUser(Expression<Func<Message, bool>> predicate);
+        Task<Result<Message, Error>> AddMessage(Message message);
+        Result<IQueryable<Message>, Error> GetAll();
     }
 }

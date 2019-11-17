@@ -1,4 +1,4 @@
-﻿namespace SignalRChat.Domain.Base
+﻿namespace SignalRChat.Domain.Base.Entities
 {
     public interface IEntity
     {

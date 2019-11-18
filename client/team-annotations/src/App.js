@@ -5,7 +5,7 @@ import './App.css';
 function App() {
   const [name, setName] = useState('Anônimo');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([""]);
+  const [messages, setMessages] = useState([]);
   const [hubConnection, setHubConnection] = useState(null);
 
   useEffect(() => {
@@ -17,9 +17,7 @@ function App() {
     if (hubConnection) {
       hubConnection.on('sendMessage', (annotation) => {
         const text = `${annotation.name}: ${annotation.text}`;
-        console.log(messages);
-        setMessages(...messages, text);
-        console.log(messages);
+        setMessages(oldMessages => [...oldMessages, text]);
       });
 
       hubConnection.start()
@@ -54,8 +52,8 @@ function App() {
             <button onClick={() => sendMessage()}>Send</button>
 
             <div>
-              {messages.map((m, index) => (
-                <span style={{display: 'block'}} key={index}> {m} </span>
+              {messages.map((messageReceived, index) => (
+                <span style={{display: 'block'}} key={index}> {messageReceived} </span>
               ))}
             </div>
         </div>

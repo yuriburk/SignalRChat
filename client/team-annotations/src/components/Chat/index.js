@@ -3,7 +3,7 @@ import * as signalR from "@aspnet/signalr";
 import { Container, MessagesBox } from "./styles";
 
 function Chat() {
-  const ENTER_KEY_CODE = 13; 
+  const ENTER_KEY_CODE = 13;
   const [name, setName] = useState("Anônimo");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -21,8 +21,9 @@ function Chat() {
   useEffect(() => {
     if (hubConnection) {
       hubConnection.on("sendMessage", annotation => {
-        const text = `${annotation.name}: ${annotation.text}`;
-        setMessages(oldMessages => [...oldMessages, text]);
+        annotation.date = getDate();
+        annotation.color = annotation.name === name ? "green" : "blue";
+        setMessages(oldMessages => [...oldMessages, annotation]);
       });
 
       hubConnection
@@ -34,8 +35,7 @@ function Chat() {
 
   function handleKeyUp(event) {
     var code = event.keyCode || event.which;
-    if (code === ENTER_KEY_CODE && message
-      ) {
+    if (code === ENTER_KEY_CODE && message) {
       sendMessage();
     }
   }
@@ -51,13 +51,27 @@ function Chat() {
     setMessage("");
   }
 
+  function getDate() {
+    var date = new Date();
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var hour = date.getHours();
+    var minute = date.getMinutes();
+
+    return `${day}/${
+      month < 10 ? `0${month}` : `${month}`
+    }/${year} ${hour}:${minute}`;
+  }
+
   return (
     <Container>
       {messages.map((messageReceived, index) => (
-        <span style={{ display: "block" }} key={index}>
-          {" "}
-          {messageReceived}{" "}
-        </span>
+        <div style={{ display: "block" }} key={index}>
+          <span style={{ color: messageReceived.color }}>{messageReceived.name} </span>
+          <span style={{ color: "gray" }}>({messageReceived.date}): </span>
+          <span>{messageReceived.text}</span>
+        </div>
       ))}
 
       <MessagesBox>
@@ -68,11 +82,7 @@ function Chat() {
           onKeyPress={handleKeyUp}
           style={{ width: "100%" }}
         />
-        <button
-          onClick={() => sendMessage()}
-        >
-          Send
-        </button>
+        <button onClick={() => sendMessage()}>Send</button>
       </MessagesBox>
     </Container>
   );

@@ -17,5 +17,4 @@
     <ProjectReference Include="..\SignalRChat.Applications\SignalRChat.Applications.csproj" />
     <ProjectReference Include="..\SignalRChat.Infra\SignalRChat.Infra.csproj" />
   </ItemGroup>
-
 </Project>

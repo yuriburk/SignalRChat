@@ -39,7 +39,7 @@ namespace SignalRChat
             {
                 builder.AllowAnyHeader()
                        .AllowAnyMethod()
-                       .WithOrigins("http://localhost:3000")
+                       .SetIsOriginAllowed(_ => true)
                        .AllowCredentials();
             });
             app.UseRouting();

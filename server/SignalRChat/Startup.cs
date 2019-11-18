@@ -37,17 +37,16 @@ namespace SignalRChat
 
             app.UseCors(builder =>
             {
-                builder.WithOrigins("http://localhost:61927/", "http://localhost:3000/")
-                    .AllowAnyHeader()
-                    .WithMethods("GET", "POST")
-                    .AllowCredentials();
+                builder.AllowAnyHeader()
+                       .AllowAnyMethod()
+                       .AllowAnyOrigin();
             });
             app.UseRouting();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<ChatHub>("chatHub");
+                endpoints.MapHub<ChatHub>("chathub");
             });
             app.EnsureCreatedDbContext();
         }

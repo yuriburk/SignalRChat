@@ -15,7 +15,7 @@ function App() {
 
   useEffect(() => {
     if (hubConnection) {
-      hubConnection.on('sendToAll', (nick, receivedMessage) => {
+      hubConnection.on('sendMessage', (nick, receivedMessage) => {
         const text = `${nick}: ${receivedMessage}`;
         setMessages(messages.concat([text]));
       });
@@ -28,7 +28,7 @@ function App() {
 
   function sendMessage() {
     hubConnection
-      .invoke('sendToAll', name, message)
+      .invoke('sendMessage', name, message)
       .catch(err => console.error(err));
   
       setMessage('');      

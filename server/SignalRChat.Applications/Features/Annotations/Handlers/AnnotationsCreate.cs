@@ -47,11 +47,7 @@ namespace SignalRChat.Applications.Features.Annotations.Handlers
             public async Task<Result<Annotation, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var annotation = _mapper.Map<Annotation>(request);
-
-                var callback = await _annotationRepository.AddAnnotation(annotation);
-                if (callback.IsFailure)
-                    return callback.Failure;
-                return callback.Success;
+                return await _annotationRepository.AddAnnotation(annotation);
             }
         }
     }

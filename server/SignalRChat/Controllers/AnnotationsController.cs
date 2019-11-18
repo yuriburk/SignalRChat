@@ -10,11 +10,11 @@ namespace SignalRChat.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class Annotations : ApiControllerBase
+    public class AnnotationsController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
-        public Annotations(IMediator mediator)
+        public AnnotationsController(IMediator mediator)
         {
             _mediator = mediator;
         }

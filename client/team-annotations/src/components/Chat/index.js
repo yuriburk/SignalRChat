@@ -9,7 +9,7 @@ function Chat() {
 
   useEffect(() => {
     setName(window.prompt('Seu nome: ', 'Yuri'));
-    setHubConnection(new signalR.HubConnectionBuilder().withUrl('http://localhost/TeamAnnotations/chathub').build());
+    setHubConnection(new signalR.HubConnectionBuilder().withUrl('http://192.168.17.26/TeamAnnotations/chathub').build());
   }, []);
 
   useEffect(() => {

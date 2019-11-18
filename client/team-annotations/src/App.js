@@ -1,23 +1,25 @@
 import React, {useState, useEffect} from 'react';
-import { HubConnection } from 'signalr-client-react';
+import * as signalR from '@aspnet/signalr';
 import './App.css';
 
 function App() {
   const [name, setName] = useState('Anônimo');
   const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([""]);
   const [hubConnection, setHubConnection] = useState(null);
 
   useEffect(() => {
     setName(window.prompt('Seu nome: ', 'Yuri'));
-    setHubConnection(new HubConnection('http://localhost:61927/chathub'));
+    setHubConnection(new signalR.HubConnectionBuilder().withUrl('http://localhost:61927/chathub').build());
   }, []);
 
   useEffect(() => {
     if (hubConnection) {
-      hubConnection.on('sendMessage', (nick, receivedMessage) => {
-        const text = `${nick}: ${receivedMessage}`;
-        setMessages(messages.concat([text]));
+      hubConnection.on('sendMessage', (annotation) => {
+        const text = `${annotation.name}: ${annotation.text}`;
+        console.log(messages);
+        setMessages(...messages, text);
+        console.log(messages);
       });
 
       hubConnection.start()
@@ -27,8 +29,12 @@ function App() {
   }, [hubConnection]);
 
   function sendMessage() {
+    var annotation = {
+      Name: name,
+      Text: message
+    };
     hubConnection
-      .invoke('sendMessage', name, message)
+      .invoke('SendAnnotation', annotation)
       .catch(err => console.error(err));
   
       setMessage('');      
@@ -48,8 +54,8 @@ function App() {
             <button onClick={() => sendMessage()}>Send</button>
 
             <div>
-              {messages.map((message, index) => (
-                <span style={{display: 'block'}} key={index}> {message} </span>
+              {messages.map((m, index) => (
+                <span style={{display: 'block'}} key={index}> {m} </span>
               ))}
             </div>
         </div>

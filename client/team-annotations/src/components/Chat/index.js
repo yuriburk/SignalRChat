@@ -15,7 +15,7 @@ function Chat() {
     setName(window.prompt("Seu nome: ", "Yuri"));
     setHubConnection(
       new signalR.HubConnectionBuilder()
-        .withUrl(`${process.env.REACT_APP_TEAM_API}`)
+        .withUrl(window.ENV.CHATHUB)
         .build()
     );
   }, []);

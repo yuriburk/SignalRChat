@@ -15,8 +15,7 @@ function Chat() {
     setName(window.prompt("Seu nome: ", "Yuri"));
     setHubConnection(
       new signalR.HubConnectionBuilder()
-        //.withUrl(`${process.env.REACT_APP_TEAM_API}`)
-        .withUrl("http://192.168.0.15/teamannotations/chathub")
+        .withUrl(`${process.env.REACT_APP_TEAM_API}`)
         .build()
     );
   }, []);

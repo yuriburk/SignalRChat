@@ -14,14 +14,24 @@ namespace SignalRChat.API.Hubs
 
         public override Task OnConnectedAsync()
         {
-            SendMessage(new Annotation() { Name = Context.User.Identity.Name, Text = "se conectou ao chat." }).Wait();
+            var message = new Annotation()
+            {
+                Name = Context.GetHttpContext().Request.Query["username"],
+                Text = "Se conectou ao chat."
+            };
+            SendMessage(message).Wait();
             return base.OnConnectedAsync();
         }
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            SendMessage(new Annotation() { Name = Context.User.Identity.Name, Text = "se desconectou do chat." }).Wait();
-            return base.OnConnectedAsync();
+            var message = new Annotation()
+            {
+                Name = Context.GetHttpContext().Request.Query["username"],
+                Text = "Se desconectou do chat."
+            };
+            SendMessage(message).Wait();
+            return base.OnDisconnectedAsync(exception);
         }
     }
 }

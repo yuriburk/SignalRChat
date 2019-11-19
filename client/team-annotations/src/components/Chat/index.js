@@ -12,14 +12,21 @@ function Chat() {
   const [hubConnection, setHubConnection] = useState(null);
 
   useEffect(() => {
-    setName(window.prompt("Seu nome: ", "Yuri"));
+    var userName = window.prompt("Seu nome: ", "Yuri");
+    setName(userName);
     setHubConnection(
-      new signalR.HubConnectionBuilder().withUrl(window.ENV.CHATHUB).build()
+      new signalR.HubConnectionBuilder()
+        .withUrl(`${window.ENV.CHATHUB}?username=${userName}`)
+        .build()
     );
   }, []);
-
   useEffect(() => {
     if (hubConnection) {
+      hubConnection
+        .start()
+        .then(() => console.log("Conectou com sucesso no hub."))
+        .catch(err => console.log("Erro ao conectar no hub."));
+
       hubConnection.on("sendMessage", messageReceived => {
         messageReceived.date = getDate();
         var isUser = messageReceived.name === name;
@@ -32,11 +39,6 @@ function Chat() {
           });
         }
       });
-
-      hubConnection
-        .start()
-        .then(() => console.log("Conectou com sucesso no hub."))
-        .catch(err => console.log("Erro ao conectar no hub."));
     }
   }, [hubConnection]);
 

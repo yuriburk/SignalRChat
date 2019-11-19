@@ -20,6 +20,7 @@ function Chat() {
         .build()
     );
   }, []);
+
   useEffect(() => {
     if (hubConnection) {
       hubConnection
@@ -44,12 +45,16 @@ function Chat() {
 
   function handleKeyUp(event) {
     var code = event.keyCode || event.which;
-    if (code === ENTER_KEY_CODE && message) {
+    if (code === ENTER_KEY_CODE && !event.shiftKey && message) {
       sendMessage(name, message);
     }
   }
 
   function sendMessage(name, message) {
+    if (!message || !message.replace(/\s/g, '').length) {
+      return;
+    }
+
     hubConnection
       .invoke("SendMessage", { Name: name, Text: message })
       .catch(err => console.error(err));
@@ -89,6 +94,7 @@ function Chat() {
           label="Mensagem"
           variant="filled"
           onChange={e => setMessage(e.target.value)}
+          multiline
           value={message}
           onKeyPress={handleKeyUp}
           style={{

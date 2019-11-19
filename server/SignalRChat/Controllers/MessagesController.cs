@@ -1,20 +1,19 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SignalRChat.API.Controllers;
-using SignalRChat.API.Hubs;
-using SignalRChat.Applications.Features.Annotations.Handlers;
-using SignalRChat.Applications.Features.AnnotationsSolicitations.Handlers;
+using SignalRChat.Applications.Features.Messages.Handlers;
+using SignalRChat.Applications.Features.MessagesSolicitations.Handlers;
 using System.Threading.Tasks;
 
 namespace SignalRChat.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AnnotationsController : ApiControllerBase
+    public class MessagesController : ApiControllerBase
     {
         private readonly IMediator _mediator;
 
-        public AnnotationsController(IMediator mediator)
+        public MessagesController(IMediator mediator)
         {
             _mediator = mediator;
         }
@@ -26,7 +25,7 @@ namespace SignalRChat.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] AnnotationsCreate.Command command)
+        public async Task<IActionResult> CreateAsync([FromBody] MessagesCreate.Command command)
         {
             return await HandleResult(() => _mediator.Send(command));
         }

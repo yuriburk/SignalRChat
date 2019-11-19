@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import * as signalR from "@aspnet/signalr";
 import { Container, MessagesBox } from "./styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import * as signalR from "@aspnet/signalr";
 
 function Chat() {
   const ENTER_KEY_CODE = 13;
@@ -10,43 +12,46 @@ function Chat() {
   const [hubConnection, setHubConnection] = useState(null);
 
   useEffect(() => {
-    setName(window.prompt("Seu nome: ", "Yuri"));
+    var userName = window.prompt("Seu nome: ", "Yuri");
+    setName(userName);
     setHubConnection(
       new signalR.HubConnectionBuilder()
-        .withUrl("http://192.168.17.26/TeamAnnotations/chathub")
+        .withUrl(`${window.ENV.CHATHUB}?username=${userName}`)
         .build()
     );
   }, []);
-
   useEffect(() => {
     if (hubConnection) {
-      hubConnection.on("sendMessage", annotation => {
-        annotation.date = getDate();
-        annotation.color = annotation.name === name ? "green" : "blue";
-        setMessages(oldMessages => [...oldMessages, annotation]);
-      });
-
       hubConnection
         .start()
-        .then(() => console.log("Connection started!"))
-        .catch(err => console.log("Error while establishing connection :("));
+        .then(() => console.log("Conectou com sucesso no hub."))
+        .catch(err => console.log("Erro ao conectar no hub."));
+
+      hubConnection.on("sendMessage", messageReceived => {
+        messageReceived.date = getDate();
+        var isUser = messageReceived.name === name;
+        messageReceived.color = isUser ? "green" : "blue";
+        setMessages(oldMessages => [...oldMessages, messageReceived]);
+
+        if (!isUser) {
+          new Notification(messageReceived.name, {
+            body: messageReceived.text
+          });
+        }
+      });
     }
   }, [hubConnection]);
 
   function handleKeyUp(event) {
     var code = event.keyCode || event.which;
     if (code === ENTER_KEY_CODE && message) {
-      sendMessage();
+      sendMessage(name, message);
     }
   }
 
-  function sendMessage() {
-    var annotation = {
-      Name: name,
-      Text: message
-    };
+  function sendMessage(name, message) {
     hubConnection
-      .invoke("SendAnnotation", annotation)
+      .invoke("SendMessage", { Name: name, Text: message })
       .catch(err => console.error(err));
     setMessage("");
   }
@@ -66,23 +71,44 @@ function Chat() {
 
   return (
     <Container>
-      {messages.map((messageReceived, index) => (
-        <div style={{ display: "block" }} key={index}>
-          <span style={{ color: messageReceived.color }}>{messageReceived.name} </span>
-          <span style={{ color: "gray" }}>({messageReceived.date}): </span>
-          <span>{messageReceived.text}</span>
-        </div>
-      ))}
+      <div style={{ margin: "0px 0px 5px 5px" }}>
+        {messages.map((messageReceived, index) => (
+          <div style={{ display: "block" }} key={index}>
+            <span style={{ color: messageReceived.color }}>
+              {messageReceived.name}{" "}
+            </span>
+            <span style={{ color: "gray" }}>({messageReceived.date}): </span>
+            <span>{messageReceived.text}</span>
+          </div>
+        ))}
+      </div>
 
       <MessagesBox>
-        <input
-          type="text"
-          value={message}
+        <TextField
+          id="filled-basic"
+          label="Mensagem"
+          variant="filled"
           onChange={e => setMessage(e.target.value)}
+          value={message}
           onKeyPress={handleKeyUp}
-          style={{ width: "100%" }}
+          style={{
+            width: "100%",
+            backgroundColor: "white"
+          }}
         />
-        <button onClick={() => sendMessage()}>Send</button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => sendMessage(name, message)}
+          style={{
+            boxShadow: "none",
+            color: "#fff",
+            width: "100px",
+            borderRadius: "0%"
+          }}
+        >
+          Enviar
+        </Button>
       </MessagesBox>
     </Container>
   );

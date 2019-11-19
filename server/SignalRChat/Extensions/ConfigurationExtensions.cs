@@ -4,10 +4,10 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using SignalRChat.Applications.Features.Annotations;
-using SignalRChat.Domain.Features.Annotations;
+using SignalRChat.Applications.Features.Messages;
+using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.Contexts;
-using SignalRChat.Infra.Features.Annotations;
+using SignalRChat.Infra.Features.Messages;
 using System;
 using Microsoft.AspNetCore.Builder;
 
@@ -19,7 +19,7 @@ namespace SignalRChat.API.Extensions
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
-                mc.AddProfile(new AnnotationMappingProfile());
+                mc.AddProfile(new MessageMappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();
             services.AddSingleton(mapper);
@@ -33,7 +33,7 @@ namespace SignalRChat.API.Extensions
 
         public static void AddDependencyInjection(this IServiceCollection services)
         {
-            services.AddScoped<IAnnotationRepository, AnnotationRepository>();
+            services.AddScoped<IMessageRepository, MessageRepository>();
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
         }
         

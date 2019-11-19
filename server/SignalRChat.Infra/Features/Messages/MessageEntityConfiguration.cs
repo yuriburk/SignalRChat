@@ -1,17 +1,17 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SignalRChat.Domain.Features.Annotations;
+using SignalRChat.Domain.Features.Messages;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace SignalRChat.Infra.Features.Annotations
+namespace SignalRChat.Infra.Features.Messages
 {
-    public class AnnotationEntityConfiguration : IEntityTypeConfiguration<Annotation>
+    public class MessageEntityConfiguration : IEntityTypeConfiguration<Message>
     {
-        public void Configure(EntityTypeBuilder<Annotation> builder)
+        public void Configure(EntityTypeBuilder<Message> builder)
         {
-            builder.ToTable("Annotation");
+            builder.ToTable("Message");
             builder.HasKey(m => m.Id);
             builder.Property(m => m.Name).HasMaxLength(255).IsRequired();
             builder.Property(m => m.Text).HasMaxLength(255).IsRequired();

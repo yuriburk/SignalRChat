@@ -2,18 +2,18 @@
 using FluentValidation;
 using FluentValidation.Results;
 using MediatR;
-using SignalRChat.Domain.Features.Annotations;
+using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.Results;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SignalRChat.Applications.Features.Annotations.Handlers
+namespace SignalRChat.Applications.Features.Messages.Handlers
 {
-    [AutoMap(typeof(Annotation))]
-    public class AnnotationsCreate
+    [AutoMap(typeof(Message))]
+    public class MessagesCreate
     {
-        public class Command : IRequest<Result<Annotation, Exception>>
+        public class Command : IRequest<Result<Message, Exception>>
         {
             public string Name { get; set; }
             public string Text { get; set; }
@@ -33,21 +33,21 @@ namespace SignalRChat.Applications.Features.Annotations.Handlers
             }
         }
 
-        public class Handler : IRequestHandler<Command, Result<Annotation, Exception>>
+        public class Handler : IRequestHandler<Command, Result<Message, Exception>>
         {
             private readonly IMapper _mapper;
-            private readonly IAnnotationRepository _annotationRepository;
+            private readonly IMessageRepository _messageRepository;
 
-            public Handler(IMapper mapper, IAnnotationRepository annotationRepository)
+            public Handler(IMapper mapper, IMessageRepository messageRepository)
             {
                 _mapper = mapper;
-                _annotationRepository = annotationRepository;
+                _messageRepository = messageRepository;
             }
 
-            public async Task<Result<Annotation, Exception>> Handle(Command request, CancellationToken cancellationToken)
+            public async Task<Result<Message, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
-                var annotation = _mapper.Map<Annotation>(request);
-                return await _annotationRepository.AddAnnotation(annotation);
+                var message = _mapper.Map<Message>(request);
+                return await _messageRepository.AddMessage(message);
             }
         }
     }

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
-import * as signalR from "@aspnet/signalr";
 import { Container, MessagesBox } from "./styles";
+import TextField from "@material-ui/core/TextField";
+import Button from "@material-ui/core/Button";
+import * as signalR from "@aspnet/signalr";
 
 function Chat() {
   const ENTER_KEY_CODE = 13;
@@ -13,7 +15,8 @@ function Chat() {
     setName(window.prompt("Seu nome: ", "Yuri"));
     setHubConnection(
       new signalR.HubConnectionBuilder()
-        .withUrl("http://192.168.17.26/TeamAnnotations/chathub")
+        //.withUrl(`${process.env.REACT_APP_TEAM_API}`)
+        .withUrl("http://192.168.0.15/teamannotations/chathub")
         .build()
     );
   }, []);
@@ -66,23 +69,44 @@ function Chat() {
 
   return (
     <Container>
-      {messages.map((messageReceived, index) => (
-        <div style={{ display: "block" }} key={index}>
-          <span style={{ color: messageReceived.color }}>{messageReceived.name} </span>
-          <span style={{ color: "gray" }}>({messageReceived.date}): </span>
-          <span>{messageReceived.text}</span>
-        </div>
-      ))}
+      <div style={{ margin: "0px 0px 5px 5px" }}  >
+        {messages.map((messageReceived, index) => (
+          <div style={{ display: "block" }} key={index}>
+            <span style={{ color: messageReceived.color }}>
+              {messageReceived.name}{" "}
+            </span>
+            <span style={{ color: "gray" }}>({messageReceived.date}): </span>
+            <span>{messageReceived.text}</span>
+          </div>
+        ))}
+      </div>
 
       <MessagesBox>
-        <input
-          type="text"
-          value={message}
+        <TextField
+          id="filled-basic"
+          label="Mensagem"
+          variant="filled"
           onChange={e => setMessage(e.target.value)}
+          value={message}
           onKeyPress={handleKeyUp}
-          style={{ width: "100%" }}
+          style={{
+            width: "100%",
+            backgroundColor: "white"
+          }}
         />
-        <button onClick={() => sendMessage()}>Send</button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => sendMessage()}
+          style={{
+            boxShadow: "none",
+            color: "#fff",
+            width: "100px",
+            borderRadius: "0%"
+          }}
+        >
+          Enviar
+        </Button>
       </MessagesBox>
     </Container>
   );

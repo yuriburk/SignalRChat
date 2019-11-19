@@ -14,41 +14,42 @@ function Chat() {
   useEffect(() => {
     setName(window.prompt("Seu nome: ", "Yuri"));
     setHubConnection(
-      new signalR.HubConnectionBuilder()
-        .withUrl(window.ENV.CHATHUB)
-        .build()
+      new signalR.HubConnectionBuilder().withUrl(window.ENV.CHATHUB).build()
     );
   }, []);
 
   useEffect(() => {
     if (hubConnection) {
-      hubConnection.on("sendMessage", annotation => {
-        annotation.date = getDate();
-        annotation.color = annotation.name === name ? "green" : "blue";
-        setMessages(oldMessages => [...oldMessages, annotation]);
+      hubConnection.on("sendMessage", messageReceived => {
+        messageReceived.date = getDate();
+        var isUser = messageReceived.name === name;
+        messageReceived.color = isUser ? "green" : "blue";
+        setMessages(oldMessages => [...oldMessages, messageReceived]);
+
+        if (!isUser) {
+          new Notification(messageReceived.name, {
+            body: messageReceived.text
+          });
+        }
       });
 
       hubConnection
         .start()
-        .then(() => console.log("Connection started!"))
-        .catch(err => console.log("Error while establishing connection :("));
+        .then(() => console.log("Conectou com sucesso no hub."))
+        .catch(err => console.log("Erro ao conectar no hub."));
     }
   }, [hubConnection]);
 
   function handleKeyUp(event) {
     var code = event.keyCode || event.which;
     if (code === ENTER_KEY_CODE && message) {
-      sendMessage();
+      sendMessage(name, message);
     }
   }
 
-  function sendMessage() {
-    var annotation = {
-      Name: name,
-      Text: message
-    };
+  function sendMessage(name, message) {
     hubConnection
-      .invoke("SendAnnotation", annotation)
+      .invoke("SendMessage", { Name: name, Text: message })
       .catch(err => console.error(err));
     setMessage("");
   }
@@ -68,7 +69,7 @@ function Chat() {
 
   return (
     <Container>
-      <div style={{ margin: "0px 0px 5px 5px" }}  >
+      <div style={{ margin: "0px 0px 5px 5px" }}>
         {messages.map((messageReceived, index) => (
           <div style={{ display: "block" }} key={index}>
             <span style={{ color: messageReceived.color }}>
@@ -96,7 +97,7 @@ function Chat() {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => sendMessage()}
+          onClick={() => sendMessage(name, message)}
           style={{
             boxShadow: "none",
             color: "#fff",

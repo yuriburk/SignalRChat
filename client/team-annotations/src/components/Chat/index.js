@@ -94,7 +94,6 @@ function Chat() {
           label="Mensagem"
           variant="filled"
           onChange={e => setMessage(e.target.value)}
-          multiline
           value={message}
           onKeyPress={handleKeyUp}
           style={{

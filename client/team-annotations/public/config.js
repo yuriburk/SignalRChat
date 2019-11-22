@@ -1,3 +1,3 @@
 window.ENV = {
-    "CHATHUB": "http://localhost:5050/chathub",
+    "CHATHUB": "http://192.168.17.26/teammessages/chathub",
 };

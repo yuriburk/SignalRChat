@@ -21,9 +21,10 @@ namespace SignalRChat
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSimpleInjector(Container, Configuration);
-            services.AddAutoMapper(Container);
+            Container.AddAutoMapper();
             Container.AddMediatR();
+            Container.AddEntityFramework(Configuration);
+            services.AddSimpleInjector(Container, Configuration);
             services.AddSignalR();
             services.AddControllers();
             services.AddMvc();

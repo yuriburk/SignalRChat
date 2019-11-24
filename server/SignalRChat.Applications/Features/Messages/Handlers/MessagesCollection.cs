@@ -4,9 +4,9 @@ using SignalRChat.Infra.Results;
 using System;
 using System.Linq;
 
-namespace SignalRChat.Applications.Features.MessagesSolicitations.Handlers
+namespace SignalRChat.Applications.Features.Messages.Handlers
 {
-    public class AnnontationsCollection
+    public class MessagesCollection
     {
         public class Query : IRequest<Result<IQueryable<Message>, Exception>> { }
 

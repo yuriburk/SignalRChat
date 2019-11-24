@@ -1,6 +1,6 @@
 {
-  "homepage": "http://localhost/teammessage/",
-  "name": "team-messages",
+  "homepage": "http://192.168.17.26/teammessenger/",
+  "name": "team-messenger",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

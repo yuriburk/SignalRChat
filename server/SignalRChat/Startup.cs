@@ -5,26 +5,31 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SignalRChat.API.Extensions;
 using SignalRChat.API.Hubs;
+using SimpleInjector;
 
 namespace SignalRChat
 {
     public class Startup
     {
+        private static Container _container = new Container();
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public IConfiguration Configuration { get; }
-
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAutoMapper();
-            services.AddMediatR();
-            services.AddDependencyInjection();
-            services.AddDbContext(Configuration);
+            services.AddSimpleInjectorDI(_container);
+            _container.AddAutoMapper();
+            _container.AddMediatR();
+            _container.AddEntityFramework(Configuration);
             services.AddSignalR();
             services.AddControllers();
+            services.AddMvc();
+            services.EnableSimpleInjectorCrossWiring(_container);
+            services.UseSimpleInjectorAspNetRequestScoping(_container);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -48,7 +53,6 @@ namespace SignalRChat
                 endpoints.MapControllers();
                 endpoints.MapHub<ChatHub>("chathub");
             });
-            app.EnsureCreatedDbContext();
         }
     }
 }

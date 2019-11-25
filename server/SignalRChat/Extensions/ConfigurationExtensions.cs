@@ -16,9 +16,8 @@ using System.Reflection;
 using System.Collections.Generic;
 using SignalRChat.Applications.Features.Messages.Handlers;
 using SignalRChat.Infra.NoSQL.Features.Messages;
-using SignalRChat.Infra.NoSQL;
-using Microsoft.Extensions.Options;
 using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Infra.NoSQL;
 
 namespace SignalRChat.API.Extensions
 {
@@ -53,13 +52,9 @@ namespace SignalRChat.API.Extensions
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(container));
             services.UseSimpleInjectorAspNetRequestScoping(container);
-            services.Configure<SignalRChatDatabaseSettings>(
-                    configuration.GetSection(nameof(SignalRChatDatabaseSettings)));
-            services.AddSingleton<ISignalRChatDatabaseSettings>(service =>
-                    service.GetRequiredService<IOptions<SignalRChatDatabaseSettings>>().Value);
-            services.AddSingleton<IMessageRepository, MessageRepository>();
             container.Register<IHttpContextAccessor, HttpContextAccessor>();
             container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
+            container.Register<IMessageRepository>(() => new MessageRepository(configuration.GetSection("SignalRChatDatabaseSettings").Get<SignalRChatDatabaseSettings>()));
         }
 
         private static IEnumerable<Assembly> GetAssemblies()

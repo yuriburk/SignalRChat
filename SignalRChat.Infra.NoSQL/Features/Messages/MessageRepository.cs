@@ -11,7 +11,7 @@ namespace SignalRChat.Infra.NoSQL.Features.Messages
     {
         private readonly IMongoCollection<Message> _messages;
 
-        public MessageRepository(ISignalRChatDatabaseSettings settings)
+        public MessageRepository(SignalRChatDatabaseSettings settings)
         {
             var client = new MongoClient(settings.ConnectionString);
             var database = client.GetDatabase(settings.DatabaseName);
@@ -23,7 +23,7 @@ namespace SignalRChat.Infra.NoSQL.Features.Messages
         => _messages.Find(message => true).ToList();
 
         public Message Get(string id) =>
-            _messages.Find(message => message.MongoId == id).FirstOrDefault();
+            _messages.Find(message => message.Id == id).FirstOrDefault();
 
         public async Task<Result<Message, Exception>> Add(Message message)
         {
@@ -32,12 +32,12 @@ namespace SignalRChat.Infra.NoSQL.Features.Messages
         }
 
         public void Update(string id, Message messageIn) =>
-            _messages.ReplaceOne(message => message.MongoId == id, messageIn);
+            _messages.ReplaceOne(message => message.Id == id, messageIn);
 
         public void Remove(Message messageIn) =>
-            _messages.DeleteOne(message => message.MongoId == messageIn.MongoId);
+            _messages.DeleteOne(message => message.Id == messageIn.Id);
 
         public void Remove(string id) =>
-            _messages.DeleteOne(message => message.MongoId == id);
+            _messages.DeleteOne(message => message.Id == id);
     }
 }

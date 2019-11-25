@@ -7,11 +7,9 @@ namespace SignalRChat.Domain.Base.Entities
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public virtual string MongoId { get; set; }
+        public virtual string Id { get; set; }
 
-        public virtual int Id { get; set; }
-
-        public bool Validate()
+        public virtual bool Validate()
         {
             return true;
         }

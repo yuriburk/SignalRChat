@@ -22,11 +22,5 @@ namespace SignalRChat.Controllers
         {
             return await HandleResult(() => _mediator.Send(new MessagesCollection.Query()));
         }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateAsync([FromBody] MessagesCreate.Command command)
-        {
-            return await HandleResult(() => _mediator.Send(command));
-        }
     }
 }

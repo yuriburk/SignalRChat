@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SignalRChat.Applications.Features.Messages.Handlers
 {
-    [AutoMap(typeof(Message))]
     public class MessagesCreate
     {
         public class Command : IRequest<Result<Message, Exception>>

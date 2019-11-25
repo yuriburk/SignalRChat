@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Infra.NoSQL.Features.Messages;
 using System;
 using System.Threading.Tasks;
 
@@ -7,8 +8,16 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
+        private MessageRepository _service;
+
+        public ChatHub(MessageRepository service)
+        {
+            _service = service;
+        }
+
         public async Task SendMessage(Message message)
         {
+            _service.Create(message);
             await Clients.All.SendAsync("sendMessage", message);
         }
 

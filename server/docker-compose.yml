@@ -20,28 +20,3 @@
 #    image: microsoft/mssql-server-linux:2017-latest
 #    networks:
 #      - signalrchat-network
-
-version: '3.4'
-
-networks: 
-  signalrchat-network:
-    driver: bridge
-
-services:
-  signalrchat.api:
-    image: ${DOCKER_REGISTRY-}signalrchatapi
-    build:
-      context: .
-      dockerfile: Dockerfile
-    networks:
-      - signalrchat-network
-    ports:
-      - "5000:5000"
-    depends_on:
-      - db
-
-  db:
-    container_name: signalrchat.database
-    image: postgres:latest
-    ports:
-      - "5432:5432"

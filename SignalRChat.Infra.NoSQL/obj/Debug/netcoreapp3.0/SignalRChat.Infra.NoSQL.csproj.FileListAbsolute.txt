@@ -1,0 +1,11 @@
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\bin\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.deps.json
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\bin\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.dll
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.csprojAssemblyReference.cache
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.AssemblyInfoInputs.cache
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.AssemblyInfo.cs
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\bin\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.pdb
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\bin\Debug\netcoreapp3.0\SignalRChat.Domain.dll
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\bin\Debug\netcoreapp3.0\SignalRChat.Domain.pdb
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.csproj.CopyComplete
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.dll
+C:\Users\jefferson.burk.HBSISNET\Documents\SignalRChat\SignalRChat.Infra.NoSQL\obj\Debug\netcoreapp3.0\SignalRChat.Infra.NoSQL.pdb

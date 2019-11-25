@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using SignalRChat.API.Controllers;
 using SignalRChat.Applications.Features.Messages.Handlers;
-using SignalRChat.Applications.Features.Messages.Handlers;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace SignalRChat.Controllers

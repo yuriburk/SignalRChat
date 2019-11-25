@@ -18,6 +18,7 @@ using SignalRChat.Applications;
 using System.Reflection;
 using System.Collections.Generic;
 using SignalRChat.Applications.Features.Messages.Handlers;
+using SignalRChat.Infra.NoSQL.Features.Messages;
 
 namespace SignalRChat.API.Extensions
 {
@@ -49,11 +50,10 @@ namespace SignalRChat.API.Extensions
 
         public static void AddSimpleInjectorDI(this IServiceCollection services, Container container)
         {
-            services.AddSimpleInjector(container, options => options.AddAspNetCore());
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(container));
             services.UseSimpleInjectorAspNetRequestScoping(container);
-            container.Register<IMessageRepository, MessageRepository>();
+            container.Register<IMessageRepository, Infra.Features.Messages.MessageRepository>();
             container.Register<IHttpContextAccessor, HttpContextAccessor>();
             container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
         }

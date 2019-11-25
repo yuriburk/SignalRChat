@@ -1,13 +1,12 @@
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using SignalRChat.API.Extensions;
 using SignalRChat.API.Hubs;
-using SignalRChat.Infra.NoSQL;
-using SignalRChat.Infra.NoSQL.Features.Messages;
 using SimpleInjector;
 
 namespace SignalRChat
@@ -24,10 +23,10 @@ namespace SignalRChat
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSignalR();
             services.AddSimpleInjectorDI(_container, Configuration);
             _container.AddAutoMapper();
             _container.AddMediatR();
-            services.AddSignalR();
             services.AddControllers();
             services.AddMvc();
             services.EnableSimpleInjectorCrossWiring(_container);

@@ -8,7 +8,7 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        private IMediator _mediator;
+        private readonly IMediator _mediator;
 
         public ChatHub(IMediator mediator)
         {

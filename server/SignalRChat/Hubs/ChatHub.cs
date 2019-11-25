@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.NoSQL.Features.Messages;
 using System;
@@ -8,16 +9,16 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        private MessageRepository _service;
+        private IMediator _mediator;
 
-        public ChatHub(MessageRepository service)
+        public ChatHub(IMediator mediator)
         {
-            _service = service;
+            _mediator = mediator;
         }
 
         public async Task SendMessage(Message message)
         {
-            _service.Create(message);
+            //_mediator.Send(message);
             await Clients.All.SendAsync("sendMessage", message);
         }
 

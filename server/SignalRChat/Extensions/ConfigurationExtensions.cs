@@ -5,9 +5,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SignalRChat.Applications.Features.Messages;
-using SignalRChat.Domain.Features.Messages;
-using SignalRChat.Infra.Contexts;
-using SignalRChat.Infra.Features.Messages;
 using SignalRChat.API.Flows;
 using FluentValidation;
 using SimpleInjector;
@@ -19,6 +16,9 @@ using System.Reflection;
 using System.Collections.Generic;
 using SignalRChat.Applications.Features.Messages.Handlers;
 using SignalRChat.Infra.NoSQL.Features.Messages;
+using SignalRChat.Infra.NoSQL;
+using Microsoft.Extensions.Options;
+using SignalRChat.Domain.Features.Messages;
 
 namespace SignalRChat.API.Extensions
 {
@@ -48,28 +48,18 @@ namespace SignalRChat.API.Extensions
             });
         }
 
-        public static void AddSimpleInjectorDI(this IServiceCollection services, Container container)
+        public static void AddSimpleInjectorDI(this IServiceCollection services, Container container, IConfiguration configuration)
         {
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(container));
             services.UseSimpleInjectorAspNetRequestScoping(container);
-            container.Register<IMessageRepository, Infra.Features.Messages.MessageRepository>();
+            services.Configure<SignalRChatDatabaseSettings>(
+                    configuration.GetSection(nameof(SignalRChatDatabaseSettings)));
+            services.AddSingleton<ISignalRChatDatabaseSettings>(service =>
+                    service.GetRequiredService<IOptions<SignalRChatDatabaseSettings>>().Value);
+            services.AddSingleton<IMessageRepository, MessageRepository>();
             container.Register<IHttpContextAccessor, HttpContextAccessor>();
             container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
-        }
-
-        public static void AddEntityFramework(this Container container, IConfiguration configuration)
-        {
-            var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseNpgsql(configuration.GetConnectionString("SignalRChat")).Options;
-            container.Register(() =>
-            {
-                return new SignalRChatDbContext(options);
-            }, Lifestyle.Scoped);
-
-            using (var context = new SignalRChatDbContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
         }
 
         private static IEnumerable<Assembly> GetAssemblies()

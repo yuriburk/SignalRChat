@@ -24,7 +24,7 @@ namespace SignalRChat
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSimpleInjectorDI(_container);
+            services.AddSimpleInjectorDI(_container, Configuration);
             _container.AddAutoMapper();
             _container.AddMediatR();
             services.AddSignalR();
@@ -32,13 +32,6 @@ namespace SignalRChat
             services.AddMvc();
             services.EnableSimpleInjectorCrossWiring(_container);
             services.UseSimpleInjectorAspNetRequestScoping(_container);
-
-            services.AddSingleton<MessageRepository>();
-            services.Configure<SignalRChatDatabaseSettings>(
-                    Configuration.GetSection(nameof(SignalRChatDatabaseSettings)));
-
-            services.AddSingleton<ISignalRChatDatabaseSettings>(sp =>
-                    sp.GetRequiredService<IOptions<SignalRChatDatabaseSettings>>().Value);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

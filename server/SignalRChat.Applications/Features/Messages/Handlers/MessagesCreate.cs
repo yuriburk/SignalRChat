@@ -47,7 +47,7 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
             public async Task<Result<Message, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var message = _mapper.Map<Message>(request);
-                return await _messageRepository.AddMessage(message);
+                return await _messageRepository.Add(message);
             }
         }
     }

@@ -19,8 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Domain", "Signa
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Infra.NoSQL", "..\SignalRChat.Infra.NoSQL\SignalRChat.Infra.NoSQL.csproj", "{34E70572-F2B7-41D5-B391-EAC3D468A145}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SignalRChat.Infra", "SignalRChat.Infra\SignalRChat.Infra.csproj", "{78415E2C-F542-44F3-875C-FC31B0986D2C}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{34E70572-F2B7-41D5-B391-EAC3D468A145}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{34E70572-F2B7-41D5-B391-EAC3D468A145}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{34E70572-F2B7-41D5-B391-EAC3D468A145}.Release|Any CPU.Build.0 = Release|Any CPU
-		{78415E2C-F542-44F3-875C-FC31B0986D2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{78415E2C-F542-44F3-875C-FC31B0986D2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{78415E2C-F542-44F3-875C-FC31B0986D2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{78415E2C-F542-44F3-875C-FC31B0986D2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,7 +50,6 @@ Global
 		{164515BC-FD44-4943-A260-F80E4132AD7B} = {E625E73D-07CD-4198-A140-607C625F6DF7}
 		{05A6BB25-37E6-4473-AB86-641F99A8B6FC} = {228813A9-DE87-4F09-8F71-8D7D4BD1CEE2}
 		{34E70572-F2B7-41D5-B391-EAC3D468A145} = {3813D152-DC04-448E-AB1E-4D64A712996B}
-		{78415E2C-F542-44F3-875C-FC31B0986D2C} = {3813D152-DC04-448E-AB1E-4D64A712996B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {813DC4DF-B933-43E1-97E5-2905101B76C4}

@@ -25,7 +25,7 @@ namespace SignalRChat.API.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static void AddAutoMapper(this Container container)
+        public static void AddAutoMapper(this IServiceCollection services, Container container)
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -57,21 +57,12 @@ namespace SignalRChat.API.Extensions
             services.UseSimpleInjectorAspNetRequestScoping(container);
             container.Register<IMessageRepository, MessageRepository>();
             container.Register<IHttpContextAccessor, HttpContextAccessor>();
-            container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
-        }
-
-        public static void AddEntityFramework(this Container container, IConfiguration configuration)
-        {
-            var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseSqlServer(configuration.GetConnectionString("SignalRChat")).Options;
             container.Register(() =>
             {
+                var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseSqlServer(configuration.GetConnectionString("SignalRChat")).Options;
                 return new SignalRChatDbContext(options);
             }, Lifestyle.Scoped);
-
-            using (var context = new SignalRChatDbContext(options))
-            {
-                context.Database.EnsureCreated();
-            }
+            container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
         }
 
         private static IEnumerable<Assembly> GetAssemblies()

@@ -4,7 +4,7 @@
     {
         public virtual int Id { get; set; }
 
-        public bool Validate()
+        public virtual bool Validate()
         {
             return true;
         }

@@ -11,7 +11,7 @@ namespace SignalRChat
 {
     public class Startup
     {
-        private static Container _container = new Container();
+        public static Container Container = new Container();
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration)
@@ -21,15 +21,15 @@ namespace SignalRChat
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSimpleInjectorDI(_container);
-            _container.AddAutoMapper();
-            _container.AddMediatR();
-            _container.AddEntityFramework(Configuration);
+            Container.AddAutoMapper();
+            Container.AddMediatR();
+            Container.AddEntityFramework(Configuration);
+            services.AddSimpleInjector(Container, Configuration);
             services.AddSignalR();
             services.AddControllers();
             services.AddMvc();
-            services.EnableSimpleInjectorCrossWiring(_container);
-            services.UseSimpleInjectorAspNetRequestScoping(_container);
+            services.EnableSimpleInjectorCrossWiring(Container);
+            services.UseSimpleInjectorAspNetRequestScoping(Container);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -39,6 +39,7 @@ namespace SignalRChat
                 app.UseDeveloperExceptionPage();
             }
 
+            Container.RegisterMvcControllers(app);
             app.UseCors(builder =>
             {
                 builder.AllowAnyHeader()

@@ -8,6 +8,8 @@ using SignalRChat.Applications.Features.Messages;
 using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.Contexts;
 using SignalRChat.Infra.Features.Messages;
+using System;
+using Microsoft.AspNetCore.Builder;
 using SignalRChat.API.Flows;
 using FluentValidation;
 using SimpleInjector;
@@ -41,15 +43,15 @@ namespace SignalRChat.API.Extensions
             container.Register(() => new ServiceFactory(container.GetInstance), Lifestyle.Singleton);
             container.Register(typeof(IRequestHandler<,>), assemblies);
             container.Register(typeof(IRequestHandler<>), assemblies);
+
             container.Collection.Register(typeof(IPipelineBehavior<,>), new[]
             {
                 typeof(ValidationFlow<,>)
             });
         }
 
-        public static void AddSimpleInjectorDI(this IServiceCollection services, Container container)
+        public static void AddSimpleInjector(this IServiceCollection services, Container container, IConfiguration configuration)
         {
-            services.AddSimpleInjector(container, options => options.AddAspNetCore());
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(container));
             services.UseSimpleInjectorAspNetRequestScoping(container);
@@ -60,7 +62,7 @@ namespace SignalRChat.API.Extensions
 
         public static void AddEntityFramework(this Container container, IConfiguration configuration)
         {
-            var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseNpgsql(configuration.GetConnectionString("SignalRChat")).Options;
+            var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseSqlServer(configuration.GetConnectionString("SignalRChat")).Options;
             container.Register(() =>
             {
                 return new SignalRChatDbContext(options);

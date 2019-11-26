@@ -4,6 +4,8 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import * as signalR from "@aspnet/signalr";
 
+import axios from "axios";
+
 function Chat() {
   const ENTER_KEY_CODE = 13;
   const [name, setName] = useState("Anônimo");
@@ -13,12 +15,21 @@ function Chat() {
 
   useEffect(() => {
     var userName = window.prompt("Seu nome: ", "Yuri");
-    setName(userName);
-    setHubConnection(
-      new signalR.HubConnectionBuilder()
-        .withUrl(`${window.ENV.CHATHUB}?username=${userName}`)
-        .build()
-    );
+    axios.get(`${window.ENV.API}messages`).then(response => {
+      setName(userName);
+      setMessages(response.data);
+      response.data.map(m => {
+        m.color = "gray";
+        m.date = getFormatedDate(m.date);
+        return m;
+      });
+
+      setHubConnection(
+        new signalR.HubConnectionBuilder()
+          .withUrl(`${window.ENV.CHATHUB}?username=${userName}`)
+          .build()
+      );
+    });
   }, []);
 
   useEffect(() => {
@@ -29,9 +40,9 @@ function Chat() {
         .catch(err => console.log("Erro ao conectar no hub."));
 
       hubConnection.on("sendMessage", messageReceived => {
-        messageReceived.date = getDate();
         var isUser = messageReceived.name === name;
         messageReceived.color = isUser ? "green" : "blue";
+        messageReceived.date = getFormatedDate(messageReceived.date);
         setMessages(oldMessages => [...oldMessages, messageReceived]);
 
         if (!isUser) {
@@ -51,7 +62,7 @@ function Chat() {
   }
 
   function sendMessage(name, message) {
-    if (!message || !message.replace(/\s/g, '').length) {
+    if (!message || !message.replace(/\s/g, "").length) {
       return;
     }
 
@@ -61,8 +72,8 @@ function Chat() {
     setMessage("");
   }
 
-  function getDate() {
-    var date = new Date();
+  function getFormatedDate(date) {
+    date = new Date(date);
     var day = date.getDate();
     var month = date.getMonth() + 1;
     var year = date.getFullYear();

@@ -17,8 +17,12 @@ namespace SignalRChat.API.Hubs
 
         public async Task SendMessage(MessagesCreate.Command message)
         {
-            await _mediator.Send(message);
-            await Clients.All.SendAsync("sendMessage", message);
+            var messageReceived = await _mediator.Send(message);
+
+            if (messageReceived.IsSuccess)
+            {
+                await Clients.All.SendAsync("sendMessage", messageReceived.Success);
+            }
         }
 
         public override Task OnConnectedAsync()

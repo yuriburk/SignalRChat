@@ -21,8 +21,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SignalRChat.Infra.NoSQL\SignalRChat.Infra.NoSQL.csproj" />
     <ProjectReference Include="..\SignalRChat.Applications\SignalRChat.Applications.csproj" />
+    <ProjectReference Include="..\SignalRChat.Infra.NoSQL\SignalRChat.Infra.NoSQL.csproj" />
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

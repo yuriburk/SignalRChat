@@ -8,7 +8,15 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
 {
     public class MessagesCollection
     {
-        public class Query : IRequest<Result<IEnumerable<Message>, Exception>> { }
+        public class Query : IRequest<Result<IEnumerable<Message>, Exception>>
+        {
+            public int? Limit { get; set; }
+
+            public Query(int? limit)
+            {
+                Limit = limit;
+            }
+        }
 
         public class Handler : RequestHandler<Query, Result<IEnumerable<Message>, Exception>>
         {
@@ -21,7 +29,7 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
 
             protected override Result<IEnumerable<Message>, Exception> Handle(Query request)
             {
-                return _repository.GetAll();
+                return _repository.GetAll(request.Limit);
             }
         }
     }

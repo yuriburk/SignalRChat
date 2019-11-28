@@ -8,6 +8,6 @@ namespace SignalRChat.Domain.Features.Messages
     public interface IMessageRepository
     {
         Task<Result<Message, Exception>> Add(Message message);
-        Result<IEnumerable<Message>, Exception> GetAll();
+        Result<IEnumerable<Message>, Exception> GetAll(int? limit);
     }
 }

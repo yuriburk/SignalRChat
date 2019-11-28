@@ -18,9 +18,9 @@ namespace SignalRChat.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllAsync()
+        public async Task<IActionResult> GetAllAsync([FromQuery] int? limit)
         {
-            return await HandleResult(() => _mediator.Send(new MessagesCollection.Query()));
+            return await HandleResult(() => _mediator.Send(new MessagesCollection.Query(limit)));
         }
     }
 }

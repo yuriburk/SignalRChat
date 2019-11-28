@@ -19,8 +19,8 @@ namespace SignalRChat.Infra.NoSQL.Features.Messages
             _messages = database.GetCollection<Message>(settings.MessagesCollectionName);
         }
 
-        public Result<IEnumerable<Message>, Exception> GetAll()
-        => _messages.Find(message => true).ToList();
+        public Result<IEnumerable<Message>, Exception> GetAll(int? limit)
+        => _messages.Find(message => true).SortByDescending(message => message.Date).Limit(limit).ToList();
 
         public Message Get(string id) =>
             _messages.Find(message => message.Id == id).FirstOrDefault();

@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\SignalRChat.Infra.NoSQL\SignalRChat.Infra.NoSQL.csproj" />
     <ProjectReference Include="..\SignalRChat.Domain\SignalRChat.Domain.csproj" />
+    <ProjectReference Include="..\SignalRChat.Infra.NoSQL\SignalRChat.Infra.NoSQL.csproj" />
   </ItemGroup>
 
 </Project>

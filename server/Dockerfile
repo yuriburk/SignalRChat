@@ -5,7 +5,7 @@ EXPOSE 80
 FROM mcr.microsoft.com/dotnet/core/sdk:3.0-buster AS build
 WORKDIR /src
 COPY ["SignalRChat/SignalRChat.API.csproj", "SignalRChat/"]
-COPY ["SignalRChat.Infra/SignalRChat.Infra.csproj", "SignalRChat.Infra/"]
+COPY ["SignalRChat.Infra.NoSQL/SignalRChat.Infra.NoSQL.csproj", "SignalRChat.Infra.NoSQL/"]
 COPY ["SignalRChat.Domain/SignalRChat.Domain.csproj", "SignalRChat.Domain/"]
 COPY ["SignalRChat.Applications/SignalRChat.Applications.csproj", "SignalRChat.Applications/"]
 RUN dotnet restore "SignalRChat/SignalRChat.API.csproj"
@@ -19,4 +19,4 @@ RUN dotnet publish "SignalRChat.API.csproj" -c Release -o /app/publish
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "SignalRChat.API.dll"]
+CMD ASPNETCORE_URLS=http://*:$PORT dotnet SignalRChat.API.dll

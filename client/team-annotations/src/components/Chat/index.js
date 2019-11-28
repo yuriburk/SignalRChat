@@ -15,7 +15,7 @@ function Chat() {
 
   useEffect(() => {
     var userName = window.prompt("Seu nome: ", "Yuri");
-    axios.get(`${window.ENV.API}messages`).then(response => {
+    axios.get(`${window.ENV.API}messages?limit=10`).then(response => {
       setName(userName);
       setMessages(response.data);
       response.data.map(m => {

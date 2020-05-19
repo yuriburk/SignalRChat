@@ -1,12 +1,15 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 export const Container = styled.div`
-    position: fixed;
-    bottom: 0;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  height: 100%;
 `;
 
 export const MessagesBox = styled.div`
-    display: flex;
-    align-items: stretch;
+  display: flex;
+  align-items: stretch;
+  justify-content: flex-end;
+  height: 5%;
 `;

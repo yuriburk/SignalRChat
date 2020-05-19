@@ -1,8 +1,13 @@
-﻿namespace SignalRChat.Domain.Base.Entities
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+
+namespace SignalRChat.Domain.Base.Entities
 {
     public abstract class Entity : IEntity
     {
-        public virtual int Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public virtual string Id { get; set; }
 
         public virtual bool Validate()
         {

@@ -1,5 +1,6 @@
-﻿using Microsoft.AspNetCore.SignalR;
-using SignalRChat.Domain.Features.Messages;
+﻿using MediatR;
+using Microsoft.AspNetCore.SignalR;
+using SignalRChat.Applications.Features.Messages.Handlers;
 using System;
 using System.Threading.Tasks;
 
@@ -7,14 +8,26 @@ namespace SignalRChat.API.Hubs
 {
     public class ChatHub : Hub
     {
-        public async Task SendMessage(Message message)
+        private readonly IMediator _mediator;
+
+        public ChatHub(IMediator mediator)
         {
-            await Clients.All.SendAsync("sendMessage", message);
+            _mediator = mediator;
+        }
+
+        public async Task SendMessage(MessagesCreate.Command message)
+        {
+            var messageReceived = await _mediator.Send(message);
+
+            if (messageReceived.IsSuccess)
+            {
+                await Clients.All.SendAsync("sendMessage", messageReceived.Success);
+            }
         }
 
         public override Task OnConnectedAsync()
         {
-            var message = new Message()
+            var message = new MessagesCreate.Command()
             {
                 Name = Context.GetHttpContext().Request.Query["username"],
                 Text = "Se conectou ao chat."
@@ -25,7 +38,7 @@ namespace SignalRChat.API.Hubs
 
         public override Task OnDisconnectedAsync(Exception exception)
         {
-            var message = new Message()
+            var message = new MessagesCreate.Command()
             {
                 Name = Context.GetHttpContext().Request.Query["username"],
                 Text = "Se desconectou do chat."

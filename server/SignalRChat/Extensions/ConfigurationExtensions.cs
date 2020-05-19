@@ -2,14 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SignalRChat.Applications.Features.Messages;
-using SignalRChat.Domain.Features.Messages;
-using SignalRChat.Infra.Contexts;
-using SignalRChat.Infra.Features.Messages;
-using System;
-using Microsoft.AspNetCore.Builder;
 using SignalRChat.API.Flows;
 using FluentValidation;
 using SimpleInjector;
@@ -19,13 +13,18 @@ using SimpleInjector.Integration.AspNetCore.Mvc;
 using SignalRChat.Applications;
 using System.Reflection;
 using System.Collections.Generic;
-using SignalRChat.Applications.Features.Messages.Handlers;
+using SignalRChat.Infra.NoSQL.Features.Messages;
+using SignalRChat.Domain.Features.Messages;
+using SignalRChat.Infra.NoSQL;
+using SignalRChat.API.Hubs;
+using Microsoft.AspNetCore.SignalR;
+using System;
 
 namespace SignalRChat.API.Extensions
 {
     public static class ConfigurationExtensions
     {
-        public static void AddAutoMapper(this IServiceCollection services, Container container)
+        public static void AddAutoMapper(this Container container)
         {
             var mappingConfig = new MapperConfiguration(mc =>
             {
@@ -39,36 +38,37 @@ namespace SignalRChat.API.Extensions
         {
             var assemblies = GetAssemblies();
 
-            container.RegisterSingleton<IMediator, Mediator>();
+            container.Register<IMediator, Mediator>();
             container.Register(() => new ServiceFactory(container.GetInstance), Lifestyle.Singleton);
             container.Register(typeof(IRequestHandler<,>), assemblies);
             container.Register(typeof(IRequestHandler<>), assemblies);
-
             container.Collection.Register(typeof(IPipelineBehavior<,>), new[]
             {
                 typeof(ValidationFlow<,>)
             });
         }
 
-        public static void AddSimpleInjector(this IServiceCollection services, Container container, IConfiguration configuration)
+        public static void AddSimpleInjectorDI(this IServiceCollection services, Container container, IConfiguration configuration)
         {
+            services.AddSingleton(container);
+            services.AddSingleton(typeof(IHubActivator<>), typeof(SimpleInjectorHubActivator<>));
             container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
             services.AddSingleton<IControllerActivator>(new SimpleInjectorControllerActivator(container));
             services.UseSimpleInjectorAspNetRequestScoping(container);
-            container.Register<IMessageRepository, MessageRepository>();
             container.Register<IHttpContextAccessor, HttpContextAccessor>();
-            container.Register(() =>
-            {
-                var options = new DbContextOptionsBuilder<SignalRChatDbContext>().UseSqlServer(configuration.GetConnectionString("SignalRChat")).Options;
-                return new SignalRChatDbContext(options);
-            }, Lifestyle.Scoped);
             container.Collection.Register(typeof(IValidator<>), typeof(ApplicationModule).GetTypeInfo().Assembly);
+            container.Register<IMessageRepository>(() => new MessageRepository(configuration.GetSection("SignalRChatDatabaseSettings").Get<SignalRChatDatabaseSettings>()));
+
+            foreach (Type type in container.GetTypesToRegister(typeof(Microsoft.AspNet.SignalR.Hub), typeof(ChatHub).Assembly))
+            {
+                container.Register(type, type, Lifestyle.Scoped);
+            }
         }
 
         private static IEnumerable<Assembly> GetAssemblies()
         {
             yield return typeof(IMediator).GetTypeInfo().Assembly;
-            yield return typeof(MessagesCollection).GetTypeInfo().Assembly;
+            yield return typeof(ApplicationModule).GetTypeInfo().Assembly;
         }
     }
 }

@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace SignalRChat.Applications.Features.Messages.Handlers
 {
-    [AutoMap(typeof(Message))]
     public class MessagesCreate
     {
         public class Command : IRequest<Result<Message, Exception>>
@@ -47,7 +46,8 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
             public async Task<Result<Message, Exception>> Handle(Command request, CancellationToken cancellationToken)
             {
                 var message = _mapper.Map<Message>(request);
-                return await _messageRepository.AddMessage(message);
+                message.Date = DateTime.Now;
+                return await _messageRepository.Add(message);
             }
         }
     }

@@ -2,15 +2,23 @@
 using SignalRChat.Domain.Features.Messages;
 using SignalRChat.Infra.Results;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 
 namespace SignalRChat.Applications.Features.Messages.Handlers
 {
     public class MessagesCollection
     {
-        public class Query : IRequest<Result<IQueryable<Message>, Exception>> { }
+        public class Query : IRequest<Result<IEnumerable<Message>, Exception>>
+        {
+            public int? Limit { get; set; }
 
-        public class Handler : RequestHandler<Query, Result<IQueryable<Message>, Exception>>
+            public Query(int? limit)
+            {
+                Limit = limit;
+            }
+        }
+
+        public class Handler : RequestHandler<Query, Result<IEnumerable<Message>, Exception>>
         {
             private readonly IMessageRepository _repository;
 
@@ -19,9 +27,9 @@ namespace SignalRChat.Applications.Features.Messages.Handlers
                 _repository = repository;
             }
 
-            protected override Result<IQueryable<Message>, Exception> Handle(Query request)
+            protected override Result<IEnumerable<Message>, Exception> Handle(Query request)
             {
-                return _repository.GetAll();
+                return _repository.GetAll(request.Limit);
             }
         }
     }

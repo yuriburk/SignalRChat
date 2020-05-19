@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Container, MessagesBox } from "./styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -7,6 +7,7 @@ import * as signalR from "@aspnet/signalr";
 import axios from "axios";
 
 const Chat = () => {
+  const messagesBox = useRef(null);
   const ENTER_KEY_CODE = 13;
   const [name, setName] = useState("Anônimo");
   const [message, setMessage] = useState("");
@@ -15,7 +16,7 @@ const Chat = () => {
 
   useEffect(() => {
     var userName = window.prompt("Seu nome: ", "Yuri");
-    axios.get(`${window.ENV.API}messages?limit=10`).then((response) => {
+    axios.get(`${window.ENV.API}messages?limit=50`).then((response) => {
       setName(userName);
       setMessages(response.data);
       response.data.map((m) => {
@@ -44,6 +45,8 @@ const Chat = () => {
         messageReceived.color = isUser ? "green" : "blue";
         messageReceived.date = getFormatedDate(messageReceived.date);
         setMessages((oldMessages) => [...oldMessages, messageReceived]);
+        console.log("mensagem");
+        messagesBox.current.scrollTop = messagesBox.current.scrollHeight;
 
         if (!isUser) {
           new Notification(messageReceived.name, {
@@ -88,21 +91,23 @@ const Chat = () => {
   return (
     <Container>
       <div
+        ref={messagesBox}
         style={{
           margin: "0px 0px 5px 5px",
-          maxHeight: "95%",
           overflowY: "auto",
           flex: 1,
         }}
       >
         <ul style={{ padding: 0, listStyle: "none" }}>
           {messages.map((messageReceived, index) => (
-            <li>
+            <li key={index}>
               <span style={{ color: messageReceived.color }}>
                 {messageReceived.name}{" "}
               </span>
               <span style={{ color: "gray" }}>({messageReceived.date}): </span>
-              <span>{messageReceived.text}</span>
+              <span style={{ wordWrap: "break-word" }}>
+                {messageReceived.text}
+              </span>
             </li>
           ))}
         </ul>

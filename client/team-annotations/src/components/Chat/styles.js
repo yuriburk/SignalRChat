@@ -11,5 +11,4 @@ export const MessagesBox = styled.div`
   display: flex;
   align-items: stretch;
   justify-content: flex-end;
-  height: 5%;
 `;

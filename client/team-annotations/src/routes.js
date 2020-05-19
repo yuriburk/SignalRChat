@@ -5,7 +5,7 @@ import Main from './pages/Main';
 
 export default function Routes() {
   return (
-    <BrowserRouter basename={'/teammessenger'}>
+    <BrowserRouter basename={'/teamannotation'}>
       <Route path="/" exact component={Main} />
     </BrowserRouter>
   );

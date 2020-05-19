@@ -1,4 +1,8 @@
-﻿namespace SignalRChat.Infra.Results
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace SignalRChat.Infra.Results
 {
     public struct Result<TSuccess, TFailure>
     {
